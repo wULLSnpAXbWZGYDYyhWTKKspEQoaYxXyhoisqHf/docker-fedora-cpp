@@ -1,0 +1,137 @@
+---
+kind: pipeline
+type: docker
+name: testing
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: kaniko-build
+  pull: always
+  image: immawanderer/drone-kaniko:linux-amd64
+  settings:
+    dockerfile: Dockerfile
+    context: .
+  when:
+    ref:
+    - "refs/heads/feature-**"
+    - "refs/pull/**"
+    - "refs/tags/**"
+    event:
+      exclude: [cron]
+
+- name: kaniko-publish
+  pull: always
+  image: immawanderer/drone-kaniko:linux-amd64
+  settings:
+    dockerfile: Dockerfile
+    context: .
+    tags:
+    - latest
+    - linux-amd64
+    - ${DRONE_COMMIT_SHA:0:8}
+    repo: immawanderer/fedora-cpp
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    ref:
+    - refs/heads/dev
+    event:
+      exclude: [pull_request, tag]
+
+trigger:
+  event: [push, pull_request, cron, tag]
+
+---
+kind: pipeline
+type: docker
+name: notifications
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  disable: true
+
+steps:
+- name: discord
+  pull: if-not-exists
+  image: appleboy/drone-discord:latest
+  settings:
+    message: >
+      {{#success build.status}}
+        ✅ [Build #{{build.number}}]({{build.link}}) of `{{repo.name}}` succeeded.
+        event: **`{{build.event}}`**
+        commit [`${DRONE_COMMIT_SHA:0:7}`](https://git.dotya.ml/${DRONE_REPO}/commit/${DRONE_COMMIT_SHA}) by {{commit.author}} on `{{commit.branch}}`
+      {{else}}
+        ❌ [Build #{{build.number}}]({{build.link}}) of `{{repo.name}}` failed.
+        event: **`${DRONE_BUILD_EVENT}`**
+        commit [`${DRONE_COMMIT_SHA:0:7}`](https://git.dotya.ml/${DRONE_REPO}/commit/${DRONE_COMMIT_SHA}) by {{commit.author}} on `{{commit.branch}}`
+        ```{{commit.message}}```
+      {{/success}}
+    webhook_id:
+      from_secret: discord_webhook_id
+    webhook_token:
+      from_secret: discord_webhook_token
+
+trigger:
+  event:
+    exclude: [pull_request]
+    include: [push, tag]
+  status:
+  - success
+  - failure
+
+depends_on:
+- testing
+
+---
+kind: pipeline
+type: docker
+name: notifications-cronbuild
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  disable: true
+
+steps:
+- name: discord
+  pull: always
+  image: appleboy/drone-discord:latest
+  settings:
+    message: >
+      {{#success build.status}}
+        ✅ [Nightly build #{{build.number}}]({{build.link}}) of `{{repo.name}}` succeeded.
+        event: **`{{build.event}}`**
+        commit [`${DRONE_COMMIT_SHA:0:7}`](https://git.dotya.ml/${DRONE_REPO}/commit/${DRONE_COMMIT_SHA}) by {{commit.author}} on `{{commit.branch}}`
+      {{else}}
+        ❌ [Nightly build #{{build.number}}]({{build.link}}) of `{{repo.name}}` failed.
+        event: **`${DRONE_BUILD_EVENT}`**
+        commit [`${DRONE_COMMIT_SHA:0:7}`](https://git.dotya.ml/${DRONE_REPO}/commit/${DRONE_COMMIT_SHA}) by {{commit.author}} on `{{commit.branch}}`
+      {{/success}}
+    webhook_id:
+      from_secret: discord_webhook_hourly_id
+    webhook_token:
+      from_secret: discord_webhook_hourly_token
+
+trigger:
+  branch:
+  - dev
+  event:
+  - cron
+  cron:
+  - nightly
+  status:
+  - success
+  - failure
+
+depends_on:
+- testing
