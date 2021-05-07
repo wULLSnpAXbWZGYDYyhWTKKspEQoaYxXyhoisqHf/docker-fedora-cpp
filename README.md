@@ -17,10 +17,41 @@ development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docke
 * updated `registry.fedoraproject.org/fedora:34` image
 * the result of
 ```sh
-dnf install -y make {c,auto}make autoconf lld binutils gcc gcc-c++ libgcc libstdc++-{devel,static} glibc-devel openmpi-devel bison flex grpc-{cli,cpp,devel,plugins} protobuf-c-{devel,compiler} protobuf-compiler cppunit log4cpp-devel json-c-devel capnproto-{devel,libs} libpcap-devel hiredis-devel mongo-c-driver-{devel,libs} boost-{devel,atomic,chrono,date-time,system,program-options,regex,thread} libtool libtool-ltdl which pkgconf openssl-devel kernel-devel ncurses-{c++-libs,devel,libs,static} && dnf clean all -y
+    dnf install -y \
+    git \
+    make \
+    {c,auto}make \
+    gcc \
+    gcc-c++ \
+    libgcc \
+    libstdc++-{devel,static} \
+    glibc-devel \
+    binutils \
+    flex \
+    bison \
+    openmpi-devel \
+    which \
+    file \
+    grpc-{cli,cpp,devel,plugins} \
+    protobuf-c-{devel,compiler} \
+    protobuf-compiler \
+    cppunit \
+    log4cpp-devel \
+    json-c-devel \
+    capnproto-{devel,libs} \
+    libpcap-devel \
+    hiredis-devel \
+    mongo-c-driver-{devel,libs} \
+    boost-{devel,atomic,chrono,date-time,system,program-options,regex,thread} \
+    libtool \
+    autoconf \
+    pkgconf \
+    kernel-devel \
+    ncurses-{c++-libs,devel,libs,static} \
+    && dnf clean all -y
 ```
-* compiled `github.com/ntop/nDPI.git`
+* compiled [`github.com/ntop/nDPI.git`](https://github.com/ntop/nDPI)
 
 ## Purpose
-* testing c/cpp programs in CI without the need to install all of the deps (such as protobuf, capnproto, pcap, boost, etc...) all the time  
-  found out that if there's enough deps it actually takes more time to pre-configure the environment than if a single image is downloaded once and reused (this one in drone CI) for all subsequent builds
+* testing c/cpp programs in CI without the need to install all of the deps (such as protobuf, capnproto, pcap, boost, etc...) all the time.  
+  found out that if there's enough deps it can actually take more time to pre-configure the environment than downloading a single image once reusing it for all subsequent CI builds.
