@@ -8,6 +8,21 @@ platform:
   arch: amd64
 
 steps:
+- name: hadolint
+  pull: always
+  image: hadolint/hadolint:v1.23.0-8-gb01c5a9-alpine
+  commands:
+  - hadolint --version
+  - hadolint Dockerfile
+  when:
+    ref:
+    - refs/heads/dev
+    - "refs/heads/feature-**"
+    - "refs/pull/**"
+    - "refs/tags/**"
+    event:
+      exclude: [cron]
+
 - name: kaniko-build
   pull: always
   image: immawanderer/drone-kaniko:linux-amd64

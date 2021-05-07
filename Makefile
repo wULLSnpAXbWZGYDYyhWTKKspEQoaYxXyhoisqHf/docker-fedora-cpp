@@ -9,8 +9,13 @@ kanikoexecutorimg = gcr.io/kaniko-project/executor:debug
 kanikowdir = /src
 kanikocontext = .
 kanikoargs = -f=$(dfile) -c=$(kanikocontext) --use-new-run --snapshotMode=redo --no-push --force
+hadolintimg = hadolint/hadolint:v1.23.0-8-gb01c5a9-alpine
+hadolintargs = run --rm -i -v $$PWD/.hadolint.yaml:/root/.config/hadolint.yaml
 
-.PHONY: build kaniko clean test prune
+.PHONY: hadolint build kaniko clean test prune
+
+hadolint:
+	$(dcmd) $(hadolintargs) $(hadolintimg) < $(dfile)
 
 kaniko:
 	$(dcmd) $(dargskaniko) $(kanikoexecutorimg) $(kanikoargs)
@@ -21,7 +26,7 @@ build:
 clean:
 	$(dcmd) $(cleanargs)
 
-test: build kaniko
+test: hadolint build kaniko
 
 prune:
 	$(dcmd) $(pruneargs)
