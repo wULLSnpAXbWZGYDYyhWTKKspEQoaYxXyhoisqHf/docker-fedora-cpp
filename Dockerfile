@@ -53,7 +53,13 @@ RUN bash -c 'export MAKEFLAGS="$MAKEFLAGS -j$(nproc)" && printf "$MAKEFLAGS\n"; 
     export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/sbin:$PATH"; \
     git clone https://github.com/ntop/nDPI.git /tmp/nDPI && \
     cd /tmp/nDPI ; \
-    git checkout 1.7 && \
+    git checkout 1.7; \
+    ./autogen.sh && \
+    ./configure && \
+    make && \
+    make install && \
+    make clean && \
+    git switch - ; \
     ./autogen.sh && \
     ./configure && \
     make && \
