@@ -43,6 +43,7 @@ RUN dnf --refresh upgrade -y \
     pkgconf \
     kernel-devel \
     ncurses-{c++-libs,devel,libs,static} \
+    numactl-{devel,libs} \
     && dnf clean all -y
 
 # see https://git.dotya.ml/wanderer/docker-fedora-cpp/issues/1

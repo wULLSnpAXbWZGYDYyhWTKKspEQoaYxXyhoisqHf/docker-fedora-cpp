@@ -46,6 +46,7 @@ development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docke
     autoconf \
     pkgconf \
     kernel-devel \
+    numactl-{devel,libs} \
     ncurses-{c++-libs,devel,libs,static} \
     && dnf clean all -y
 ```
