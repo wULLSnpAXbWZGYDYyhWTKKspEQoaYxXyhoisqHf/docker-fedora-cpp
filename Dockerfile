@@ -11,8 +11,8 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.license=GPL-3.0
 
-RUN dnf --refresh upgrade -y \
-    && dnf install --nodocs -y \
+RUN dnf --refresh upgrade -y
+RUN dnf install --nodocs -y \
     git \
     make \
     {c,auto}make \
