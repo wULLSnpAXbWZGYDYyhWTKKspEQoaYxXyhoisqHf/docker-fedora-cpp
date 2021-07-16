@@ -12,7 +12,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.license=GPL-3.0
 
 RUN dnf --refresh upgrade -y \
-    && dnf install -y \
+    && dnf install --nodocs -y \
     git \
     make \
     {c,auto}make \
