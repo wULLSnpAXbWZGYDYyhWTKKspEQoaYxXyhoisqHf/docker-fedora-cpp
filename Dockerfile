@@ -48,6 +48,10 @@ RUN dnf install --nodocs -y \
     numactl-{devel,libs} \
     && dnf clean all -y
 
+# nDPI will by default (left unchanged) be installed with prefix "/usr/local".
+# this makes sure the results get picked up in subsequent linkings against it.
+RUN printf "/usr/local/lib\n" >> /etc/ld.so.conf.d/local.conf && /usr/sbin/ldconfig
+
 # see https://git.dotya.ml/wanderer/docker-fedora-cpp/issues/1
 #
 # building nDPI would fail with plain RUN and kaniko.
