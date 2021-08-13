@@ -11,7 +11,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.license=GPL-3.0
 
-RUN dnf --refresh upgrade -y
+RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remove=True\nfastestmirror=True\nmax_parallel_downloads=7\n" > /etc/dnf/dnf.conf; \
+      cat /etc/dnf/dnf.conf; \
+      dnf --refresh upgrade -y
 RUN dnf install --nodocs -y \
     git \
     make \
