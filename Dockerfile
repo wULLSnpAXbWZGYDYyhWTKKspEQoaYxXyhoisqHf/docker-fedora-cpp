@@ -16,6 +16,7 @@ RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remo
       dnf --refresh upgrade -y
 RUN dnf install --nodocs -y \
     git \
+    ninja-build \
     make \
     {c,auto}make \
     gcc \
