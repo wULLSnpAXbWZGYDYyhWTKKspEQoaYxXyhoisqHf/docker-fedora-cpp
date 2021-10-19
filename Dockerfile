@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.2
+# syntax=docker/dockerfile:1.3
 FROM registry.fedoraproject.org/fedora:34
 
 ARG BUILD_DATE
