@@ -29,6 +29,9 @@ steps:
   settings:
     dockerfile: Dockerfile
     context: .
+    args:
+      - BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+      - VCS_REF=${DRONE_COMMIT_SHA:0:7}
   when:
     ref:
     - "refs/heads/feature-**"
@@ -43,6 +46,9 @@ steps:
   settings:
     dockerfile: Dockerfile
     context: .
+    args:
+      - BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+      - VCS_REF=${DRONE_COMMIT_SHA:0:7}
     tags:
     - latest
     - linux-amd64
