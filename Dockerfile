@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM registry.fedoraproject.org/fedora:34
+FROM registry.fedoraproject.org/fedora-minimal:34
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -12,9 +12,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.license=GPL-3.0
 
 RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remove=True\nfastestmirror=True\nmax_parallel_downloads=7\n" > /etc/dnf/dnf.conf; \
-      cat /etc/dnf/dnf.conf; \
-      dnf --refresh upgrade -y
-RUN dnf install --nodocs -y \
+    cat /etc/dnf/dnf.conf; \
+    microdnf --refresh upgrade -y
+RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
     git \
     ninja-build \
     make \
@@ -47,7 +47,7 @@ RUN dnf install --nodocs -y \
     kernel-devel \
     ncurses-{c++-libs,devel,libs,static} \
     numactl-{devel,libs} \
-    && dnf clean all -y
+    && microdnf clean all -y
 
 # nDPI will by default (left unchanged) be installed with prefix "/usr/local".
 # this makes sure the results get picked up in subsequent linkings against it.
