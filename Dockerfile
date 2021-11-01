@@ -25,6 +25,7 @@ RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
     libstdc++-{devel,static} \
     glibc-devel \
     binutils \
+    lld \
     flex \
     bison \
     openmpi-devel \
