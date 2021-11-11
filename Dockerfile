@@ -24,6 +24,7 @@ RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
     libgcc \
     libstdc++-{devel,static} \
     glibc-devel \
+    cryptopp-devel \
     binutils \
     lld \
     flex \
