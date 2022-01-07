@@ -14,7 +14,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remove=True\nfastestmirror=True\nmax_parallel_downloads=7\n" > /etc/dnf/dnf.conf; \
     cat /etc/dnf/dnf.conf; \
     microdnf --refresh upgrade -y
-RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
+RUN microdnf install --nodocs dnf dnf-plugins-core -y && \
+    dnf copr enable eddsalkield/iwyu -y && \
+    microdnf install --nodocs --setopt install_weak_deps=0 -y \
     git \
     ninja-build \
     make \
@@ -24,6 +26,7 @@ RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
     libgcc \
     libstdc++-{devel,static} \
     glibc-devel \
+    iwyu \
     cryptopp-devel \
     libasan-static \
     liblsan-static \
@@ -52,6 +55,10 @@ RUN microdnf install --nodocs --setopt install_weak_deps=0 -y \
     kernel-devel \
     ncurses-{c++-libs,devel,libs,static} \
     numactl-{devel,libs} \
+    && dnf copr disable eddsalkield/iwyu \
+    && rm -vf /etc/dnf/protected.d/dnf.conf \
+    && microdnf remove dnf-plugins-core -y \
+    && rpm --nodeps -e dnf \
     && microdnf clean all -y
 
 # nDPI will by default (left unchanged) be installed with prefix "/usr/local".
