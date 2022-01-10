@@ -31,6 +31,7 @@ RUN microdnf install --nodocs dnf dnf-plugins-core -y && \
     libasan-static \
     liblsan-static \
     libubsan-static \
+    libtsan-static \
     binutils \
     lld \
     flex \
