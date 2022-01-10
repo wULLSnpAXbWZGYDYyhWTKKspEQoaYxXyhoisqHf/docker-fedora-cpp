@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM registry.fedoraproject.org/fedora-minimal:34
+FROM registry.fedoraproject.org/fedora-minimal:35
 
 ARG BUILD_DATE
 ARG VCS_REF

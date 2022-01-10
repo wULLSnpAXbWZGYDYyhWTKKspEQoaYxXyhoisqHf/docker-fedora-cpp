@@ -13,10 +13,12 @@ The image is rebuilt nightly to ensure it always has the latest packages.
 development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docker-fedora-cpp)
 
 ## What you get
-* updated `registry.fedoraproject.org/fedora-minimal:34` image
+* updated `registry.fedoraproject.org/fedora-minimal:35` image
 * the result of
 ```sh
-    dnf install -y \
+    microdnf install --nodocs dnf dnf-plugins-core -y && \
+    dnf copr enable eddsalkield/iwyu -y && \
+    microdnf install --nodocs --setopt install_weak_deps=0 -y \
     git \
     ninja-build \
     make \
@@ -26,7 +28,14 @@ development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docke
     libgcc \
     libstdc++-{devel,static} \
     glibc-devel \
+    iwyu \
+    cryptopp-devel \
+    libasan-static \
+    liblsan-static \
+    libubsan-static \
+    libtsan-static \
     binutils \
+    lld \
     flex \
     bison \
     openmpi-devel \
@@ -47,9 +56,13 @@ development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docke
     autoconf \
     pkgconf \
     kernel-devel \
-    numactl-{devel,libs} \
     ncurses-{c++-libs,devel,libs,static} \
-    && dnf clean all -y
+    numactl-{devel,libs} \
+    && dnf copr disable eddsalkield/iwyu \
+    && rm -vf /etc/dnf/protected.d/dnf.conf \
+    && microdnf remove dnf-plugins-core -y \
+    && rpm --nodeps -e dnf \
+    && microdnf clean all -y
 ```
 * compiled [`github.com/ntop/nDPI.git`](https://github.com/ntop/nDPI)
 
