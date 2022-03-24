@@ -4,7 +4,6 @@ ignored:
   - DL3039
   # DL3041 warning: Specify version with `dnf install -y <package>-<version>`.
   - DL3041
-  # SC2039 warning: In POSIX sh, brace expansion is undefined.
+  # SC3009 warning: In POSIX sh, brace expansion is undefined.
   # it actually still works
-  - SC2039
-
+  - SC3009

@@ -10,7 +10,7 @@ platform:
 steps:
 - name: hadolint
   pull: always
-  image: hadolint/hadolint:v1.23.0-8-gb01c5a9-alpine
+  image: hadolint/hadolint:v2.9.3-alpine
   commands:
   - hadolint --version
   - hadolint Dockerfile
