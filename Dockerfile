@@ -13,8 +13,11 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remove=True\nfastestmirror=True\nmax_parallel_downloads=7\n" > /etc/dnf/dnf.conf; \
     cat /etc/dnf/dnf.conf; \
-    microdnf --refresh upgrade -y
-RUN microdnf install --nodocs dnf dnf-plugins-core -y && \
+    \
+    microdnf --refresh upgrade -y && \
+    \
+    \
+    microdnf install --nodocs dnf dnf-plugins-core -y && \
     dnf copr enable eddsalkield/iwyu -y && \
     microdnf install --nodocs --setopt install_weak_deps=0 -y \
     git \
@@ -60,17 +63,14 @@ RUN microdnf install --nodocs dnf dnf-plugins-core -y && \
     && rm -vf /etc/dnf/protected.d/dnf.conf \
     && microdnf remove dnf-plugins-core -y \
     && rpm --nodeps -e dnf \
-    && microdnf clean all -y
-
-# nDPI will by default (left unchanged) be installed with prefix "/usr/local".
-# this makes sure the results get picked up in subsequent linkings against it.
-RUN printf "/usr/local/lib\n" >> /etc/ld.so.conf.d/local.conf && /usr/sbin/ldconfig
-
-# see https://git.dotya.ml/wanderer/docker-fedora-cpp/issues/1
-#
-# building nDPI would fail with plain RUN and kaniko.
-# having it wrapped in 'bash -c' helped
-RUN bash -c 'export MAKEFLAGS="$MAKEFLAGS -j$(nproc)" && printf "$MAKEFLAGS\n"; \
+    && microdnf clean all -y && \
+    \
+	\
+    printf "/usr/local/lib\n" >> /etc/ld.so.conf.d/local.conf && \
+	/usr/sbin/ldconfig && \
+    \
+	\
+    bash -c 'export MAKEFLAGS="$MAKEFLAGS -j$(nproc)" && printf "$MAKEFLAGS\n"; \
     export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/sbin:$PATH"; \
     git clone https://github.com/ntop/nDPI.git /tmp/nDPI && \
     cd /tmp/nDPI ; \
@@ -84,7 +84,15 @@ RUN bash -c 'export MAKEFLAGS="$MAKEFLAGS -j$(nproc)" && printf "$MAKEFLAGS\n"; 
     ./autogen.sh && \
     ./configure && \
     make && \
-    make install'
-RUN if [ -f /tmp/nDPI/config.log ]; then cat /tmp/nDPI/config.log; fi; \
+    make install'; \
+	\
+    if [ -f /tmp/nDPI/config.log ]; then cat /tmp/nDPI/config.log; fi; \
     rm -rf /tmp/nDPI
 
+# nDPI is by default (left unchanged) installed with prefix "/usr/local".
+# we make sure the results (libs in /usr/local/lib) get picked up in subsequent
+# linkings against it by aappending to /etc/ld.so.conf.d/local.conf.
+# see https://git.dotya.ml/wanderer/docker-fedora-cpp/issues/1
+#
+# further, building nDPI would fail with plain RUN inside kaniko.
+# having it wrapped in 'bash -c' helped
