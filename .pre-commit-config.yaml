@@ -1,0 +1,11 @@
+---
+fail_fast: false
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: check-merge-conflict
+  - repo: https://git.dotya.ml/wanderer/hadolint-pre-commit
+    rev: v0.0.1
+    hooks:
+      - id: hadolint-container

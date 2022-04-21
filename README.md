@@ -1,5 +1,6 @@
 # docker-fedora-cpp
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Build Status](https://drone.dotya.ml/api/badges/wanderer/docker-fedora-cpp/status.svg?ref=refs/heads/dev)](https://drone.dotya.ml/wanderer/docker-fedora-cpp)
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/immawanderer/fedora-cpp)](https://hub.docker.com/r/immawanderer/fedora-cpp/tags/?page=1&ordering=last_updated)
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/immawanderer/archlinux/linux-amd64)](https://hub.docker.com/r/immawanderer/fedora-cpp/tags/?page=1&ordering=last_updated&name=linux-amd64)
