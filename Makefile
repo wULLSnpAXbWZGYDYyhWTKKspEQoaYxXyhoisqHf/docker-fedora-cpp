@@ -13,8 +13,7 @@ vcs_ref = $$(git rev-parse --short HEAD)
 build_date= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 hadolintimg = hadolint/hadolint
 hadolinttag = v2.9.3-alpine
-hadolintargs = run --rm -i -v $$PWD/.hadolint.yaml:/root/.config/hadolint.yaml
-
+hadolintargs = run --rm -i -v $$PWD:/src:z --workdir=/src
 .PHONY: hadolint build kaniko clean test prune
 
 hadolint:
