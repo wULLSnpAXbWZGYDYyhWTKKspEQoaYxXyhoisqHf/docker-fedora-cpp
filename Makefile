@@ -5,7 +5,7 @@ dargs = build -t $(dtag) --no-cache --pull - < $(dfile)
 cleanargs = image rm -f $(dtag)
 pruneargs = system prune -af
 dargskaniko = run --rm -it -w=$(kanikowdir) -v $$PWD:$(kanikowdir)
-kanikoexecutorimg = gcr.io/kaniko-project/executor:v1.8.0-debug
+kanikoexecutorimg = gcr.io/kaniko-project/executor:v1.8.1-debug
 kanikowdir = /src
 kanikocontext = .
 kanikoargs = -f=$(dfile) -c=$(kanikocontext) --use-new-run --snapshotMode=redo --build-arg BUILD_DATE=$(build_date) --build-arg VCS_REF=$(vcs_ref) --no-push
