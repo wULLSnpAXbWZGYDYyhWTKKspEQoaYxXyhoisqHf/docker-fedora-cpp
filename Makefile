@@ -4,7 +4,7 @@ dtag = immawanderer/fedora-cpp:testbuild
 dargs = build -t $(dtag) --no-cache --pull - < $(dfile)
 cleanargs = image rm -f $(dtag)
 pruneargs = system prune -af
-dargskaniko = run --rm -it -w=$(kanikowdir) -v $$PWD:$(kanikowdir)
+dargskaniko = run --rm -it -w=$(kanikowdir) -v $$PWD:$(kanikowdir):z
 kanikoexecutorimg = gcr.io/kaniko-project/executor:v1.8.1-debug
 kanikowdir = /src
 kanikocontext = .
