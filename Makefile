@@ -12,7 +12,7 @@ kanikoargs = -f=$(dfile) -c=$(kanikocontext) --use-new-run --snapshotMode=redo -
 vcs_ref = $$(git rev-parse --short HEAD)
 build_date= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 hadolintimg = hadolint/hadolint
-hadolinttag = v2.9.3-alpine
+hadolinttag = v2.10.0-alpine
 hadolintargs = run --rm -i -v $$PWD:/src:z --workdir=/src
 .PHONY: hadolint build kaniko clean test prune
 
