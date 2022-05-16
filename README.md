@@ -14,7 +14,7 @@ The image is rebuilt nightly to ensure it always has the latest packages.
 development happens on [this Gitea instance](https://git.dotya.ml/wanderer/docker-fedora-cpp)
 
 ## What you get
-* updated `registry.fedoraproject.org/fedora-minimal:35` image
+* updated `registry.fedoraproject.org/fedora-minimal:36` image
 * the result of
 ```sh
     microdnf install --nodocs dnf dnf-plugins-core -y && \
