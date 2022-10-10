@@ -4,12 +4,21 @@ FROM registry.fedoraproject.org/fedora-minimal:36
 ARG BUILD_DATE
 ARG VCS_REF
 
-LABEL description="Container image mainly used for CI testing of C/C++ programs on Fedora"
-
-LABEL org.label-schema.build-date=$BUILD_DATE \
+# as per https://github.com/opencontainers/image-spec/blob/main/annotations.md,
+# keep Label Schema labels for backward compatibility.
+LABEL description="Container image mainly used for CI testing of C/C++ programs on Fedora" \
+      org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://git.dotya.ml/wanderer/docker-fedora-cpp.git" \
       org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.license=GPL-3.0
+      org.label-schema.license=GPL-3.0 \
+      org.opencontainers.image.title="docker-fedora-cpp" \
+      org.opencontainers.image.description="Container image mainly used for CI testing of C/C++ programs on Fedora" \
+      org.opencontainers.image.created=$BUILD_DATE \
+      org.opencontainers.image.authors=wanderer \
+      org.opencontainers.image.url="https://git.dotya.ml/wanderer/docker-fedora-cpp.git" \
+      org.opencontainers.image.source="https://git.dotya.ml/wanderer/docker-fedora-cpp.git" \
+      org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.licenses=GPL-3.0
 
 RUN printf "[main]\ngpg_check=1\ninstallonly_limit=2\nclean_requirements_on_remove=True\nfastestmirror=True\nmax_parallel_downloads=7\n" > /etc/dnf/dnf.conf; \
     cat /etc/dnf/dnf.conf; \
